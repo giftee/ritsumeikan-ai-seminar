@@ -23,6 +23,35 @@
 
 余裕がある人は発展課題として自分のPR作成まで進めてください。
 
+## 任意: ローカル環境セットアップ
+
+ローカルで実装やテストまで試したい人向けの手順です。当日のハンズオンでは必須ではありません。
+
+### 前提
+
+- Node.js 22 系
+- npm
+- Git
+
+### 手順
+
+```bash
+git clone https://github.com/giftee/ritsumeikan-ai-seminar.git
+cd ritsumeikan-ai-seminar
+npm install
+npm test
+```
+
+テストが通れば、ローカルで教材コードを動かせる状態です。
+
+### 発展課題でブランチを作る場合
+
+```bash
+git switch -c your-name/lab-gift-recommendation
+```
+
+変更後は `npm test` で確認してから、CommitやPull Request作成に進んでください。
+
 ## テスト
 
 ```bash
