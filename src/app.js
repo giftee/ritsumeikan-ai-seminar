@@ -82,7 +82,13 @@ const scenes = [
   },
 ];
 
-const tagOptions = ["coffee", "sweet", "drink", "stationery", "special"];
+const tagOptions = [
+  ["coffee", "コーヒー"],
+  ["sweet", "甘いもの"],
+  ["drink", "ドリンク"],
+  ["stationery", "文房具"],
+  ["special", "特別感"],
+];
 const categoryOptions = [
   ["convenience_store", "コンビニ"],
   ["cafe", "カフェ"],
@@ -130,6 +136,10 @@ function getTagMatches(gift) {
   return gift.tags.filter((tag) => state.profile.preferredTags.includes(tag));
 }
 
+function getOptionLabel(options, value) {
+  return options.find(([optionValue]) => optionValue === value)?.[1] ?? value;
+}
+
 function render() {
   const recommended = getRecommendedGift();
   const resultLabel = recommended?.name ?? "おすすめできるギフトがありません";
@@ -138,16 +148,17 @@ function render() {
     state.profile.excludedCategories.includes(recommended.category);
   const overBudget = recommended && recommended.price > state.profile.budget;
   const unavailable = recommended && !recommended.available;
+  const needsReview = blockedByCategory || overBudget || unavailable;
 
   app.innerHTML = `
     <section class="workspace">
       <header class="topbar">
         <div>
-          <p class="eyebrow">AI x GitHub Hands-on</p>
+          <p class="eyebrow">研究室・サークル向け</p>
           <h1>差し入れeギフト推薦</h1>
         </div>
-        <div class="status ${blockedByCategory || overBudget || unavailable ? "status-alert" : "status-ok"}">
-          ${blockedByCategory || overBudget || unavailable ? "Review Needed" : "Ready"}
+        <div class="status ${needsReview ? "status-alert" : "status-ok"}">
+          ${needsReview ? "要レビュー" : "条件OK"}
         </div>
       </header>
 
@@ -176,13 +187,13 @@ function render() {
         </div>
 
         <div class="field">
-          <span class="label">好みタグ</span>
+          <span class="label">好み</span>
           <div class="chips">
             ${tagOptions
               .map(
-                (tag) => `
-                  <button class="chip ${state.profile.preferredTags.includes(tag) ? "selected" : ""}" data-preferred="${tag}">
-                    ${tag}
+                ([value, label]) => `
+                  <button class="chip ${state.profile.preferredTags.includes(value) ? "selected" : ""}" data-preferred="${value}">
+                    ${label}
                   </button>
                 `
               )
@@ -191,7 +202,7 @@ function render() {
         </div>
 
         <div class="field">
-          <span class="label">除外カテゴリ</span>
+          <span class="label">避けたいカテゴリ</span>
           <div class="chips">
             ${categoryOptions
               .map(
@@ -208,19 +219,19 @@ function render() {
 
       <section class="result" aria-label="推薦結果">
         <div>
-          <p class="eyebrow">Recommendation</p>
+          <p class="eyebrow">推薦結果</p>
           <h2>${resultLabel}</h2>
           ${
             recommended
-              ? `<p>${recommended.price}円 / ${categoryOptions.find(([value]) => value === recommended.category)?.[1] ?? recommended.category} / ${recommended.tone}</p>`
+              ? `<p>${recommended.price}円 / ${getOptionLabel(categoryOptions, recommended.category)} / ${recommended.tone}</p>`
               : "<p>条件を変えると候補が見つかる場合があります。</p>"
           }
         </div>
         <div class="review-flags">
-          ${blockedByCategory ? '<span class="flag bad">除外カテゴリ</span>' : ""}
+          ${blockedByCategory ? '<span class="flag bad">避けたいカテゴリ</span>' : ""}
           ${overBudget ? '<span class="flag bad">予算超過</span>' : ""}
-          ${unavailable ? '<span class="flag bad">在庫なし</span>' : ""}
-          ${recommended ? `<span class="flag">一致タグ ${getTagMatches(recommended).length}</span>` : ""}
+          ${unavailable ? '<span class="flag bad">売り切れ</span>' : ""}
+          ${recommended ? `<span class="flag">好み一致 ${getTagMatches(recommended).length}</span>` : ""}
         </div>
       </section>
 
@@ -237,14 +248,14 @@ function render() {
                   <h3>${gift.name}</h3>
                   <strong>${gift.price}円</strong>
                 </div>
-                <p>${categoryOptions.find(([value]) => value === gift.category)?.[1] ?? gift.category} / ${gift.tone}</p>
+                <p>${getOptionLabel(categoryOptions, gift.category)} / ${gift.tone}</p>
                 <div class="mini-tags">
-                  ${gift.tags.map((tag) => `<span class="${matches.includes(tag) ? "matched" : ""}">${tag}</span>`).join("")}
+                  ${gift.tags.map((tag) => `<span class="${matches.includes(tag) ? "matched" : ""}">${getOptionLabel(tagOptions, tag)}</span>`).join("")}
                 </div>
                 <div class="checks">
-                  <span class="${gift.available ? "ok" : "ng"}">${gift.available ? "在庫あり" : "在庫なし"}</span>
+                  <span class="${gift.available ? "ok" : "ng"}">${gift.available ? "贈れる" : "売り切れ"}</span>
                   <span class="${budgetOut ? "ng" : "ok"}">${budgetOut ? "予算外" : "予算内"}</span>
-                  <span class="${excluded ? "ng" : "ok"}">${excluded ? "除外" : "対象"}</span>
+                  <span class="${excluded ? "ng" : "ok"}">${excluded ? "避けたい" : "候補"}</span>
                 </div>
               </article>
             `;
