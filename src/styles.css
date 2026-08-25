@@ -1,21 +1,23 @@
 :root {
-  --ink: #26312d;
-  --muted: #647069;
-  --line: #ded9cf;
-  --surface: #fffefa;
-  --surface-soft: #f6faf6;
-  --warm: #d86a3a;
-  --warm-soft: #fff0e8;
-  --calm: #2f6d68;
-  --calm-soft: #e7f2ef;
-  --caution: #9a4a27;
-  --caution-soft: #fff1e8;
-  --neutral-chip: #eef1ed;
+  --paper: #f5f3ea;
+  --card: #fffdf7;
+  --ink: #24302a;
+  --muted: #5f6c62;
+  --line: #ddd7c6;
+  --pine: #17594f;
+  --pine-deep: #0f4038;
+  --pine-soft: #e2eee8;
+  --shu: #c23a2a;
+  --shu-soft: #faeae4;
+  --kin: #a8862f;
+  --kin-soft: #f6efdb;
+  --chip: #edeade;
+  --font-display: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+    sans-serif;
   color: var(--ink);
-  background: #fbfaf7;
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  background: var(--paper);
+  font-family: var(--font-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -28,9 +30,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    linear-gradient(180deg, #fffaf5 0%, #f7fbf7 54%, #fbfaf7 100%),
-    #fbfaf7;
+  background: var(--paper);
+  border-top: 6px solid var(--pine);
+  box-shadow: inset 0 1px 0 var(--kin);
 }
 
 button,
@@ -45,7 +47,7 @@ button {
 .workspace {
   width: min(1080px, calc(100vw - 32px));
   margin: 0 auto;
-  padding: 28px 0 36px;
+  padding: 30px 0 44px;
 }
 
 .topbar {
@@ -54,15 +56,15 @@ button {
   justify-content: space-between;
   gap: 20px;
   border-bottom: 1px solid var(--line);
-  padding: 8px 0 18px;
+  padding: 6px 0 20px;
 }
 
 .eyebrow {
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: 0.78rem;
+  margin: 0 0 8px;
+  color: var(--pine);
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0;
+  letter-spacing: 0.18em;
 }
 
 h1,
@@ -74,53 +76,75 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  line-height: 1.08;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
 }
 
 h2 {
   margin-bottom: 10px;
-  font-size: clamp(1.55rem, 2.4vw, 2.6rem);
-  line-height: 1.12;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.45rem, 2.2vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: 0.03em;
 }
 
 h3 {
   margin-bottom: 0;
-  font-size: 1rem;
-  line-height: 1.25;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.3;
 }
 
+/* 検印風スタンプ */
 .status {
+  position: relative;
   flex: 0 0 auto;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 13px;
-  font-size: 0.82rem;
-  font-weight: 800;
+  transform: rotate(-3deg);
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+}
+
+.status::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .status-ok {
-  background: var(--calm-soft);
-  color: var(--calm);
+  color: var(--pine);
 }
 
 .status-alert {
-  background: var(--caution-soft);
-  color: var(--caution);
+  color: var(--shu);
 }
 
 .controls {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1.4fr 1.4fr;
   gap: 12px;
-  padding: 16px 0 18px;
+  padding: 18px 0;
 }
 
 .field {
   min-width: 0;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 254, 250, 0.86);
+  border-radius: 10px;
+  background: var(--card);
   padding: 14px;
 }
 
@@ -130,8 +154,9 @@ h3 {
   align-items: center;
   justify-content: space-between;
   color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
 .segments,
@@ -144,44 +169,45 @@ h3 {
 
 .segment,
 .chip {
-  border: 1px solid #cdd4ce;
-  border-radius: 999px;
-  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
   color: var(--ink);
   min-height: 36px;
   padding: 8px 12px;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .segment:hover,
 .chip:hover {
-  border-color: var(--warm);
+  border-color: var(--pine);
 }
 
 .segment:focus-visible,
 .chip:focus-visible,
 .range:focus-visible {
-  outline: 3px solid rgba(216, 106, 58, 0.24);
+  outline: 3px solid rgba(23, 89, 79, 0.35);
   outline-offset: 2px;
 }
 
 .segment.active,
 .chip.selected {
-  border-color: var(--warm);
-  background: var(--warm-soft);
-  color: #7a351b;
+  border-color: var(--pine);
+  background: var(--pine-soft);
+  color: var(--pine-deep);
+  font-weight: 700;
 }
 
 .chip.danger.selected {
-  border-color: var(--caution);
-  background: var(--caution-soft);
-  color: var(--caution);
+  border-color: var(--shu);
+  background: var(--shu-soft);
+  color: var(--shu);
 }
 
 .range {
   width: 100%;
   margin-top: 14px;
-  accent-color: var(--warm);
+  accent-color: var(--pine);
 }
 
 .result {
@@ -190,15 +216,16 @@ h3 {
   gap: 20px;
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 254, 250, 0.9);
-  padding: 18px;
+  border-left: 4px solid var(--pine);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 22px;
 }
 
 .result p {
   margin-bottom: 0;
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .review-flags {
@@ -209,17 +236,17 @@ h3 {
 }
 
 .flag {
-  border-radius: 999px;
-  background: var(--neutral-chip);
-  color: #43504a;
-  padding: 9px 12px;
-  font-size: 0.82rem;
-  font-weight: 900;
+  border-radius: 6px;
+  background: var(--chip);
+  color: #4a564c;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .flag.bad {
-  background: var(--caution-soft);
-  color: var(--caution);
+  background: var(--shu-soft);
+  color: var(--shu);
 }
 
 .gift-grid {
@@ -232,14 +259,16 @@ h3 {
 .gift {
   min-height: 180px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 254, 250, 0.88);
-  padding: 14px;
+  border-radius: 10px;
+  background: var(--card);
+  padding: 16px 14px 14px;
 }
 
 .gift.recommended {
-  border-color: var(--warm);
-  box-shadow: inset 0 0 0 2px rgba(216, 106, 58, 0.42);
+  border-color: var(--kin);
+  border-top: 3px solid var(--kin);
+  box-shadow: 0 0 0 1px var(--kin);
+  background: linear-gradient(180deg, var(--kin-soft) 0%, var(--card) 42%);
 }
 
 .gift-head {
@@ -249,11 +278,17 @@ h3 {
   gap: 10px;
 }
 
+.gift-head strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .gift p {
   margin: 8px 0 12px;
   color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .mini-tags,
@@ -265,20 +300,20 @@ h3 {
 
 .mini-tags span,
 .checks span {
-  border-radius: 999px;
-  padding: 5px 8px;
-  font-size: 0.78rem;
-  font-weight: 800;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .mini-tags span {
-  background: var(--neutral-chip);
-  color: #58655e;
+  background: var(--chip);
+  color: #59665b;
 }
 
 .mini-tags .matched {
-  background: var(--warm-soft);
-  color: #7a351b;
+  background: var(--kin-soft);
+  color: #7c5f1a;
 }
 
 .checks {
@@ -286,13 +321,13 @@ h3 {
 }
 
 .checks .ok {
-  background: var(--calm-soft);
-  color: var(--calm);
+  background: var(--pine-soft);
+  color: var(--pine);
 }
 
 .checks .ng {
-  background: var(--caution-soft);
-  color: var(--caution);
+  background: var(--shu-soft);
+  color: var(--shu);
 }
 
 @media (max-width: 900px) {
@@ -301,6 +336,14 @@ h3 {
     align-items: stretch;
     grid-template-columns: 1fr;
     flex-direction: column;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .status {
+    align-self: flex-start;
   }
 
   .controls,
@@ -316,7 +359,7 @@ h3 {
 @media (max-width: 620px) {
   .workspace {
     width: min(100vw - 20px, 1180px);
-    padding-top: 18px;
+    padding-top: 20px;
   }
 
   .controls,
